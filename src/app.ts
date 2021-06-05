@@ -1,5 +1,12 @@
-import express from 'express';
+import { getLunchList, getRandom } from './util';
+import Slack from './slack';
 
-const app = express();
+(() => {
+    const LUNCH_NUMBER = 3; // 슬랙 채널에 표시될 수
 
-app.listen(3000, () => {console.log('Server on!')});
+    const lunchList = getLunchList();
+    const randomLunch = getRandom(lunchList, LUNCH_NUMBER);
+
+    const slack = new Slack('https://hooks.slack.com/services/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');
+    slack.incomingWebhook().sendMessage(randomLunch);
+})();
